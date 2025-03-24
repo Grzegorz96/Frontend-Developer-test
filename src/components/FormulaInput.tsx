@@ -4,17 +4,7 @@ import { TextField, Button, Box, Typography } from "@mui/material";
 import { evaluate } from "mathjs";
 import { useQuery } from "@tanstack/react-query";
 import { type Tag } from "../types";
-
-const fetchTags = async (value: string): Promise<Tag[] | undefined> => {
-    const response = await fetch(
-        `https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete?value=${value}`
-    );
-
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
-    }
-    return response.json();
-};
+import { fetchTags } from "../utils/helpers";
 
 export const FormulaInput: React.FC = () => {
     const { formula, setFormula, addTag, removeTag } = useFormulaStore();
