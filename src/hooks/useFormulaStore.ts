@@ -3,10 +3,10 @@ import { type Tag } from "../types";
 
 interface FormulaStore {
     formula: string;
-    tags: Tag[]; // Zmieniamy na tablicę obiektów Tag
+    tags: Tag[];
     setFormula: (newFormula: string) => void;
-    addTag: (tag: Tag) => void; // Zmieniamy na obiekt Tag
-    removeTag: (tagId: string) => void; // Usuwamy po ID tagu
+    addTag: (tag: Tag) => void;
+    removeTag: (tagId: string) => void;
 }
 
 export const useFormulaStore = create<FormulaStore>((set) => ({

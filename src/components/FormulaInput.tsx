@@ -17,30 +17,29 @@ const fetchTags = async (value: string): Promise<Tag[] | undefined> => {
 };
 
 export const FormulaInput: React.FC = () => {
-    const { setFormula, addTag, removeTag } = useFormulaStore();
-    const [input, setInput] = useState<string>("");
+    const { formula, setFormula, addTag, removeTag } = useFormulaStore();
     const [result, setResult] = useState<string | null>(null);
     const {
         data: suggestedTags,
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["tags", input],
-        queryFn: () => fetchTags(input),
-        enabled: input.trim().length > 0,
+        queryKey: ["tags", formula],
+        queryFn: () => fetchTags(formula),
+        enabled: formula.trim().length > 0,
         staleTime: 10000,
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        setInput(newValue);
+
         setFormula(newValue);
         calculateResult(newValue);
     };
 
     const calculateResult = (expression: string) => {
         try {
-            const sanitizedExpression = expression.replace(/\^/g, "**"); // Zamiana `^` na `**` dla potęgowania
+            const sanitizedExpression = expression.replace(/\^/g, "**");
             const evaluatedResult = evaluate(sanitizedExpression);
 
             if (
@@ -57,19 +56,18 @@ export const FormulaInput: React.FC = () => {
     };
 
     const handleTagClick = (tag: Tag) => {
-        addTag(tag); // Dodajemy pełny obiekt tagu
-        setInput(""); // Reset input po kliknięciu tagu
+        addTag(tag);
         calculateResult(tag.value.toString());
     };
 
     const handleTagRemove = (tagId: string) => {
-        removeTag(tagId); // Usuwamy tag po jego ID
+        removeTag(tagId);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Backspace" && input === "") {
+        if (e.key === "Backspace" && formula === "") {
             const lastTag = useFormulaStore.getState().tags.slice(-1)[0];
-            if (lastTag) removeTag(lastTag.id); // Usuwamy ostatni tag po ID
+            if (lastTag) removeTag(lastTag.id);
         }
     };
 
@@ -83,7 +81,7 @@ export const FormulaInput: React.FC = () => {
                     fullWidth
                     label="Enter formula"
                     variant="outlined"
-                    value={input}
+                    value={formula}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                 />
@@ -105,7 +103,7 @@ export const FormulaInput: React.FC = () => {
             <Box mt={2}>
                 {useFormulaStore.getState().tags.map((tag) => (
                     <Box
-                        key={tag.id} // Używamy ID tagu jako klucza
+                        key={tag.id}
                         sx={{
                             display: "flex",
                             alignItems: "center",
@@ -131,7 +129,6 @@ export const FormulaInput: React.FC = () => {
                 ))}
             </Box>
             <Box mt={2}>
-                {/* Wyświetlanie sugerowanych tagów */}
                 {isLoading && <Typography>Loading...</Typography>}
                 {isError && (
                     <Typography color="error">Error loading tags</Typography>
@@ -142,7 +139,7 @@ export const FormulaInput: React.FC = () => {
                         <Box>
                             {suggestedTags.map((tag: Tag, index: number) => (
                                 <Button
-                                    key={index} // Używamy ID jako klucza
+                                    key={index}
                                     onClick={() => handleTagClick(tag)}
                                     variant="outlined"
                                     sx={{ marginRight: 1, marginBottom: 1 }}
