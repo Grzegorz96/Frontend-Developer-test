@@ -17,7 +17,7 @@ const fetchTags = async (value: string): Promise<Tag[] | undefined> => {
 };
 
 export const FormulaInput: React.FC = () => {
-    const { formula, setFormula, addTag, removeTag } = useFormulaStore();
+    const { setFormula, addTag, removeTag } = useFormulaStore();
     const [input, setInput] = useState<string>("");
     const [result, setResult] = useState<string | null>(null);
     const {
